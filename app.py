@@ -68,7 +68,7 @@ def make_next_item_id():
 
     for item in items:                                                     # Loop => this loop goes through (loops over) each item in the list (item in items)
         try:                                                               # Try => Begins appempts to convert items ID to an integer, it won't crash if it cant
-            current_id = int(item.get("item_id", "0") or "0")              # Tries to get item_id from dictionary , if empty it uses zero => converting id to integer 
+            current_id = int(item.get("item_identification", "0") or "0")              # Tries to get item_id from dictionary , if empty it uses zero => converting id to integer 
             if current_id > highest_id:                                    # Checks if the current ID is the biggest its seen so far 
                 highest_id = current_id                                    # Updates highest_id if current_id is biggest so far
         except ValueError:                                                 
@@ -122,14 +122,14 @@ def add_item_to_inventory():
  
         try:
             quantity = int(quantity_input)                                                                             # Attempt to convert input to integer 
-            if quantity > 0:                                                                                           # Valid positive number                                           
-                break
+            if quantity > 0:                                                                                                                                      
+                break                                                                                                  # Valid positive number => Loop ends 
             else:
-                print("***NEGATIVE NUMBER or ZERO DETECTED: QUANTITY MUST BE A WHOLE INTEGER GREATER THAN ZERO***\n")  #
-        except ValueError:
-            if "." in quantity_input:
+                print("***NEGATIVE NUMBER or ZERO DETECTED: QUANTITY MUST BE A WHOLE INTEGER GREATER THAN ZERO***\n")  #If integr isn't a decimal (can't be) it must be a negative number 
+        except ValueError:                                                                                             # ValueError triggers if python interpreter couldn't convert quantity_input into an integer 
+            if "." in quantity_input:                                                                                  # Checks specifically if the quantity_input is a decimal
                 print("***DECIMAL DETECTED: QUANTITY MUST BE A WHOLE INTEGER GREATER THAN ZERO***\n")
-            else:
+            else:                                                                                                      # Covers all other invalid inputs 
                 print("***INVALID INPUT: QUANTITY MUST BE A WHOLE INTEGER GREATER THAN ZERO***\n")
 
     # Creating dictionary (for Inputted Item) which matches CSV column headers 
@@ -146,9 +146,36 @@ def add_item_to_inventory():
     add_new_row(new_row)                                                                                               # Adds new dictionary row to CSV file
     print("***Item Successfully added to Fylde Aero Inventory Management System***")
     
-add_item_to_inventory()
 
+# Function, that when called, will display all inventory items, in a column-aligned formatted table 
+
+def display_inventory():
+    """Show all inventory enteries in column aligned-table format"""                                                      # Docstring => Explains what the function does
+
+    print("\n***Inventory Item Display***")
+
+    all_items = item_dictionary_list()                                                                                    # Reads all of inventory rows into a list of dictionaries 
+
+    if len(all_items) == 0:                                                                                               # Checks if the list is empty 
+        print("***The Fylde Aero Inventory Management System is empty***")
+        return
     
-    
-    
-    
+    # Print table headers with their aligment 
+    print(f"{'Identification':>3} {'Item Name':<20} {'Quantity':>4} {'Item Unit':<6} {'Username':<12} {'Date Inputted'}")  # Prints table headers with their allignment 
+
+    # loop through each item and print the data in aligned columns 
+
+    for item in all_items:                                                                                                  # Loops through each inventory row => getting the value for each field of each dictionary 
+        print(
+            f"{item.get('item_identification', ''):>3} "  
+            f"{item.get('item_name', ''):<20} "  
+            f"{item.get('item_quantity', ''):>4} "  
+            f"{item.get('item_unit', ''):<6} "  
+            f"{item.get('name_of_inputter', ''):<12} "  
+            f"{item.get('date_inputted', '')} "  
+        )
+
+    print()                                                                                                                 # Blank Line left for readability 
+
+display_inventory()
+add_item_to_inventory()
