@@ -36,19 +36,20 @@ def is_csv_ready():
 # Function then returns a list of dictionaries => each row in CSV becomes a dictionary
 
 def item_dictionary_list():
-    """Return all inventory items as a list of dictionaries"""            # Docstring        => Explains what the function does 
+    """Return all inventory items as a list of dictionaries"""                # Docstring        => Explains what the function does 
 
-    is_csv_ready()                                                        # Function Calling => calls is_csv_ready() fuction, ensuring CSV exists before inventory_read_all() function tries to read 
+    is_csv_ready()                                                            # Function Calling => calls is_csv_ready() fuction, ensuring CSV exists before inventory_read_all() function tries to read 
 
-    with open(csv_path, mode="r", encoding="utf-8", newline="") as file:  # with statement   => opens CSV file in read mode, preparing to read each row
-        reader = csv.DictReader(file)                                     # Tells function to read each row of CSV as a dictionary (name:value)
-        item_dictionary_list  = list(reader)                              # Collects all the item dictionaries, orders them in a list 
+    with open(csv_path, mode="r", encoding="utf-8", newline="") as csv_file:  # with statement   => opens CSV file in read mode, preparing to read each row
+        reader = csv.DictReader(csv_file)                                     # Tells function to read each row of CSV as a dictionary (name:value)
+        item_dictionary_list  = list(reader)                                  # Collects all the item dictionaries, orders them in a list 
 
-    return item_dictionary_list ()                                        # Function Result Return => Function reads all rows, returning them as list of dictionaries 
+    return item_dictionary_list ()                                            # Function Result Return => Function reads all rows, returning them as list of dictionaries 
+
 
 
 # Function, that when called, checks all existing items in CSV, finding the highest ID
-#Function then assigns the next number
+# Function then assigns the next number
 
 def make_next_item_id():
     """Return next available numeric ID for Inventory item awaiting ID"""  # Docstring        => Explains what the function does 
@@ -66,3 +67,17 @@ def make_next_item_id():
     
     return str(highest_id + 1)                                             # Function returns the next available ID as a string 
 
+
+
+# Function, that when called, adds (appends) a new row (item) to the inventory CSV file 
+# Function does not delete/ overwrite any previous rows/ data when called
+
+def add_new_row(row):
+    """Add one new row to the Inventory CSV file without removig previous data"""  # Docstring => Explains what the function does
+    
+    is_csv_ready()                                                                 # Function Calling => makes sure CSV file exists before trying to open it and write new data to it 
+
+    with open(csv_path, mode="a", encoding="utf-8", newline="") as csv_file:       # Opens CSV file in append mode => adding data to the end of the file => avoiding overwriting 
+        writer = csv.DictWriter(csv_file, fieldnames=column_header)                # Setting up dictionary writer tool => matches values to correct column header 
+        writer.writerow(row)                                                       # Writes new dictionary row of data into CSV file 
+ 
