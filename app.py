@@ -1,4 +1,7 @@
-# Importing necessary modules:
+####################################
+### Importing necessary libraries: ###
+####################################
+
     # csv      => to read/write to CSV files
     # os       => enables python to interact with the operating system (e.g. checking files, creating folders, ect.)
     # datetime => enables me to work with dates and times in my code 
@@ -14,6 +17,12 @@ from datetime import datetime
 
 csv_path      = "inventory.csv"
 column_header = ["item_identification", "item_name", "item_quantity", "item_unit", "name_of_inputter", "date_inputted"]
+
+
+
+##########################
+### Back-End Functions ###
+##########################
 
 
 
@@ -81,3 +90,62 @@ def add_new_row(row):
         writer = csv.DictWriter(csv_file, fieldnames=column_header)                # Setting up dictionary writer tool => matches values to correct column header 
         writer.writerow(row)                                                       # Writes new dictionary row of data into CSV file 
  
+
+
+###########################
+### Front-End Functions ###
+###########################
+
+
+
+# Function that, when called, enables user to intput new item into the inventory CSV file 
+# Function collects the data (using input), ckecks the data is valid => then adds data to new appended row in the CSV file 
+
+def add_item_to_inventory():
+    """Collect inputted item data via user input and add new entry to inventory CSV file """             # Docstring => Explains what the function does
+
+    print("\n***Add a New Item to Inventory***")                                                         # Prints heading on console to make text clear
+
+    # Collecting user inputs 
+
+    item_name      = input("Enter Item Name: ").strip()                                                   # User Item name input field => .strip() removes extra spaces before/after name 
+    quantity_unit  = input("Enter Unit of Quantity: ").strip() or "units"                                 # Unit input field => if left blank, defaults to "units"
+    username       = input("Enter Username: ").strip()                                                   # Records user who added item
+
+    # Quantity Validation Loop - Keeps asking until valid number entered 
+
+    while True: 
+
+        quantity_input = input("Enter Item Quantity (Whole Integer): ").strip()                              # Quantity input field => stored as text 
+
+        if quantity_input.isdigit():                                                                         # Checks input contains only numbers
+            quantity = int(quantity_input)                                                                   # Converts quantity from string to integer 
+
+            if quantity > 0:                                                                                 # Validates quantity is positive 
+                break                                                                                        # Breaks loop if input is valid 
+            else:
+                print("***NEGATIVE NUMBER DETECTED: QUANTITY MUST BE A WHOLE INTEGER GREATER THAN ZERO***\n")  
+
+        else:
+            print("***DECIMAL DETECTED: QUANTITY MUST BE A WHOLE INTEGER GREATER THAN ZERO***\n")            # If quantity doesn't contain only digits, loop end => input Invalid  
+
+    # Creating dictionary (for Inputted Item) which matches CSV column headers 
+
+    new_row = {
+        "item_identification" : make_next_item_id(),
+        "item_name"           : item_name,
+        "item_quantity"       : str(quantity),
+        "item_unit"           : quantity_unit, 
+        "name_of_inputter"    : username,
+        "date_inputted"       : datetime.now().strftime("%Y-%m-%d")
+        }
+    
+    add_new_row(new_row)
+    print("***Item Successfully added to Fylde Aero Inventory Management System***")
+    
+add_item_to_inventory()
+
+    
+    
+    
+    
