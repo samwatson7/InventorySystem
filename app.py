@@ -53,7 +53,7 @@ def item_dictionary_list():
         reader = csv.DictReader(csv_file)                                     # Tells function to read each row of CSV as a dictionary (name:value)
         item_dictionary_list  = list(reader)                                  # Collects all the item dictionaries, orders them in a list 
 
-    return item_dictionary_list ()                                            # Function Result Return => Function reads all rows, returning them as list of dictionaries 
+    return item_dictionary_list                                               # Function Result Return => Function reads all rows, returning them as list of dictionaries 
 
 
 
@@ -102,45 +102,48 @@ def add_new_row(row):
 # Function collects the data (using input), ckecks the data is valid => then adds data to new appended row in the CSV file 
 
 def add_item_to_inventory():
-    """Collect inputted item data via user input and add new entry to inventory CSV file """             # Docstring => Explains what the function does
-
-    print("\n***Add a New Item to Inventory***")                                                         # Prints heading on console to make text clear
+    """Collect inputted item data via user input and add new entry to inventory CSV file """                           # Docstring => Explains what the function does
+  
+    print("\n***Add a New Item to Inventory***")                                                                       # Prints heading on console to make text clear
 
     # Collecting user inputs 
 
-    item_name      = input("Enter Item Name: ").strip()                                                   # User Item name input field => .strip() removes extra spaces before/after name 
-    quantity_unit  = input("Enter Unit of Quantity: ").strip() or "units"                                 # Unit input field => if left blank, defaults to "units"
-    username       = input("Enter Username: ").strip()                                                   # Records user who added item
+    item_name      = input("Enter Item Name: ").strip()                                                                # User Item name input field => .strip() removes extra spaces before/after name 
+    quantity_unit  = input("Enter Unit of Quantity: ").strip() or "units"                                              # Unit input field => if left blank, defaults to "units"
+    username       = input("Enter Username: ").strip()                                                                 # Records user who added item
 
     # Quantity Validation Loop - Keeps asking until valid number entered 
 
     while True: 
 
-        quantity_input = input("Enter Item Quantity (Whole Integer): ").strip()                              # Quantity input field => stored as text 
+        quantity_input = input("Enter Item Quantity (Whole Integer): ").strip()                                        # Quantity input field => stored as text 
 
-        if quantity_input.isdigit():                                                                         # Checks input contains only numbers
-            quantity = int(quantity_input)                                                                   # Converts quantity from string to integer 
-
-            if quantity > 0:                                                                                 # Validates quantity is positive 
-                break                                                                                        # Breaks loop if input is valid 
+        # Checks if input is a valid integer (including negative numbers)
+ 
+        try:
+            quantity = int(quantity_input)                                                                             # Attempt to convert input to integer 
+            if quantity > 0:                                                                                           # Valid positive number                                           
+                break
             else:
-                print("***NEGATIVE NUMBER DETECTED: QUANTITY MUST BE A WHOLE INTEGER GREATER THAN ZERO***\n")  
-
-        else:
-            print("***DECIMAL DETECTED: QUANTITY MUST BE A WHOLE INTEGER GREATER THAN ZERO***\n")            # If quantity doesn't contain only digits, loop end => input Invalid  
+                print("***NEGATIVE NUMBER or ZERO DETECTED: QUANTITY MUST BE A WHOLE INTEGER GREATER THAN ZERO***\n")  #
+        except ValueError:
+            if "." in quantity_input:
+                print("***DECIMAL DETECTED: QUANTITY MUST BE A WHOLE INTEGER GREATER THAN ZERO***\n")
+            else:
+                print("***INVALID INPUT: QUANTITY MUST BE A WHOLE INTEGER GREATER THAN ZERO***\n")
 
     # Creating dictionary (for Inputted Item) which matches CSV column headers 
 
     new_row = {
-        "item_identification" : make_next_item_id(),
+        "item_identification" : make_next_item_id(),                                                                   # Creates next unique ID number 
         "item_name"           : item_name,
-        "item_quantity"       : str(quantity),
+        "item_quantity"       : str(quantity),                                                                         # Stores as string, so is written to CSV in correct format
         "item_unit"           : quantity_unit, 
         "name_of_inputter"    : username,
-        "date_inputted"       : datetime.now().strftime("%Y-%m-%d")
+        "date_inputted"       : datetime.now().strftime("%Y-%m-%d")                                                    # Records today's date in CSV file 
         }
     
-    add_new_row(new_row)
+    add_new_row(new_row)                                                                                               # Adds new dictionary row to CSV file
     print("***Item Successfully added to Fylde Aero Inventory Management System***")
     
 add_item_to_inventory()
