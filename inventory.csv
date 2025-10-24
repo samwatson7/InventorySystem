@@ -1,1 +1,1 @@
-item_id,item_name,quantity,unit,added_by,date_added
+item_identification,item_name,item_quantity,item_unit,name_of_inputter,date_inputted
