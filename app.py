@@ -175,7 +175,48 @@ def display_inventory():
             f"{item.get('date_inputted', '')} "  
         )
 
-    print()                                                                                                                 # Blank Line left for readability 
+    print()                                                                                                                  # Blank Line left for readability
+    
+                                                                                                                
 
-display_inventory()
-add_item_to_inventory()
+# Function, that, when called will give the user a number of options => enabling them to decide what they would like to do with the Inventory Management System 
+# This function is the main program loop => runs the inventory system 
+
+def start_inventory_system():
+    """Main function that runs the menu and handles user choices"""
+
+    is_csv_ready()                                                                 # Makes sure CSV file exists before trying to perform any action requiring CSV
+
+    while True:                                                                    # Keeps program running until user decided to quit 
+        print ("\n --- Fylde Aero Inventory Management System Main Menu --- ")     # Shows menu options available to user 
+        print ("1) Add New Item to inventory")
+        print ("2) View All Inventory Items")
+        print ("3) Exit Inventory")
+
+        user_decision = input("Enter your choice (1/2/3): ").strip()               # Asks user what the want to do with the system => takes in their answer as an input 
+
+        # Option 1 : Add Item
+
+        if user_decision == "1":
+            add_item_to_inventory()
+
+        # Option 2 : Display Items
+
+        elif user_decision == "2":
+            display_inventory()
+
+        # Option 3 : Exit Program 
+
+        elif user_decision == "3":
+            print("\n Exiting Fylde Aero Inventory Management System - Goodbye!\n")
+            break
+
+        # Invalid Choice Handling 
+        else:
+            print("*** Invalid Choice - Please enter 1, 2, or 3 ***\n")
+
+        
+        if __name__ == "__main__":                                                   # Ensures program only runs if this file is the one being executed directly 
+            start_inventory_system()
+
+
