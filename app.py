@@ -118,7 +118,7 @@ def add_item_to_inventory():
 
         quantity_input = input("Enter Item Quantity (Whole Integer): ").strip()                                        # Quantity input field => stored as text 
 
-        # Checks if input is a valid integer (including negative numbers)
+    # Checks if input is a valid integer (including negative numbers)
  
         try:
             quantity = int(quantity_input)                                                                             # Attempt to convert input to integer 
@@ -145,6 +145,50 @@ def add_item_to_inventory():
     
     add_new_row(new_row)                                                                                               # Adds new dictionary row to CSV file
     print("***Item Successfully added to Fylde Aero Inventory Management System***")
+
+
+
+# Function, that when called, will read the inventory as a list of dictionaries, and then delete an item from the inventory using the Item ID
+
+def delete_item_from_inventory(): 
+    """Removes an item from the CSV file using items ID"""                                                                 # Docstring => Explains what the function does
+ 
+    # Read all items into a list  
+    items = item_dictionary_list()                                                                                          # Calls function that reads every line of CSV file and turns them into list of dictionaries
+
+    # Check if inventory has items available for deletion - if empty, function ends early    
+    if not items:
+        print("\n***Inventory is Empty - No Items to Delete***\n")
+        return 
+        
+    # Begin Item deletion process - gain Item ID from user via input 
+    print("\n***Delete Item***\n")
+    item_id_to_delete = input("Enter the ID of the Item you would like to delete: ").strip()
+
+    # Check if Item ID exists 
+    item_exists = False                                                                                                      # item_exists checks if the given ID exists in the list - initially set to false 
+    updated_items = []                                                                                                       # updated_items holds all the items which should stay in CSV 
+
+    for item in items:                                                                                                       # goes through every item in inventory dictionary list, if current ID matches deletion request ID, it skipped (not coppied to updated_items list)
+        if item.get("item_identification") == item_id_to_delete:                                             
+            item_exists = True 
+            print(f"Item '{item.get('item_name')}' has been deleted for the Fylde Aero Inventory System") 
+        else:
+            updated_items.append(item)
+
+    if not item_exists:                                                                                                       # if loop ends and no match is found, it tells the user that the ID doesn't exist - stops function 
+        print("\n***No Item found with that ID***\n")
+        return 
+
+    # Write Updated list back to CSV file 
+    with open("inventory.csv", mode="w", newline="") as csv_file:                                                             # Opens CSV in Write Mode, erasing old content - writes column headers, then writes all remaining (non-deleted) items 
+        fieldnames = ["item_identification", "item_name", "item_quantity", "item_unit", "name_of_inputter", "date_inputted"]
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(updated_items)
+
+    print("\n***Fylde Aero Inventory Updated Sucessfully***\n")                                                               # Success message - know deletion worked
+
     
 
 # Function, that when called, will display all inventory items, in a column-aligned formatted table 
@@ -177,7 +221,9 @@ def display_inventory():
 
     print()                                                                                                                  # Blank Line left for readability
     
-                                                                                                                
+################################                                                                                                                
+### Inventory Start Function ###
+################################
 
 # Function, that, when called will give the user a number of options => enabling them to decide what they would like to do with the Inventory Management System 
 # This function is the main program loop => runs the inventory system 
@@ -185,15 +231,16 @@ def display_inventory():
 def start_inventory_system():
     """Main function that runs the menu and handles user choices"""
 
-    is_csv_ready()                                                                 # Makes sure CSV file exists before trying to perform any action requiring CSV
+    is_csv_ready()                                                                  # Makes sure CSV file exists before trying to perform any action requiring CSV
 
-    while True:                                                                    # Keeps program running until user decided to quit 
-        print ("\n --- Fylde Aero Inventory Management System Main Menu --- ")     # Shows menu options available to user 
+    while True:                                                                     # Keeps program running until user decided to quit 
+        print ("\n --- Fylde Aero Inventory Management System Main Menu --- ")      # Shows menu options available to user 
         print ("1) Add New Item to inventory")
         print ("2) View All Inventory Items")
-        print ("3) Exit Inventory")
+        print ("3) Delete an Item ")
+        print ("4) Exit Inventory")
 
-        user_decision = input("Enter your choice (1/2/3): ").strip()               # Asks user what the want to do with the system => takes in their answer as an input 
+        user_decision = input("Enter your choice (1/2/3/4): ").strip()               # Asks user what the want to do with the system => takes in their answer as an input 
 
         # Option 1 : Add Item
 
@@ -205,18 +252,25 @@ def start_inventory_system():
         elif user_decision == "2":
             display_inventory()
 
-        # Option 3 : Exit Program 
+        # Option 3 : Delete an Item
 
         elif user_decision == "3":
+            delete_item_from_inventory()
+
+        # Option 4 : Exit Program 
+
+        elif user_decision == "4":
             print("\n Exiting Fylde Aero Inventory Management System - Goodbye!\n")
             break
 
         # Invalid Choice Handling 
         else:
-            print("*** Invalid Choice - Please enter 1, 2, or 3 ***\n")
+            print("*** Invalid Choice - Please enter 1, 2, 3 or 4 ***\n")
 
         
         if __name__ == "__main__":                                                   # Ensures program only runs if this file is the one being executed directly 
             start_inventory_system()
+
+
 
 
