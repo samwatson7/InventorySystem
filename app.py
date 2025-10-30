@@ -268,9 +268,5 @@ def start_inventory_system():
             print("*** Invalid Choice - Please enter 1, 2, 3 or 4 ***\n")
 
         
-        if __name__ == "__main__":                                                   # Ensures program only runs if this file is the one being executed directly 
-            start_inventory_system()
-
-
-
-
+if __name__ == "__main__":                                                   # Ensures program only runs if this file is the one being executed directly 
+    start_inventory_system()
