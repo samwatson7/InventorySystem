@@ -205,17 +205,17 @@ def display_inventory():
         return
     
     # Print table headers with their aligment 
-    print(f"{'Identification':>3} {'Item Name':<20} {'Quantity':>4} {'Item Unit':<6} {'Username':<12} {'Date Inputted'}")  # Prints table headers with their allignment 
-
+    print(f"{'Identification':<6} {'Item Name':<35} {'Quantity':<10} {'Item Unit':<12} {'Username':<20} {'Date Inputted':<20}")  # Prints table headers with their allignment 
+    print("-" * 110)
     # loop through each item and print the data in aligned columns 
 
     for item in all_items:                                                                                                  # Loops through each inventory row => getting the value for each field of each dictionary 
         print(
-            f"{item.get('item_identification', ''):>3} "  
-            f"{item.get('item_name', ''):<20} "  
-            f"{item.get('item_quantity', ''):>4} "  
-            f"{item.get('item_unit', ''):<6} "  
-            f"{item.get('name_of_inputter', ''):<12} "  
+            f"{item.get('item_identification', ''):<5} "  
+            f"{item.get('item_name', ''):<25} "  
+            f"{item.get('item_quantity', ''):<10} "  
+            f"{item.get('item_unit', ''):<10} "  
+            f"{item.get('name_of_inputter', ''):<15} "  
             f"{item.get('date_inputted', '')} "  
         )
 
