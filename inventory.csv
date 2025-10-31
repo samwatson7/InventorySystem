@@ -1,3 +1,4 @@
 item_identification,item_name,item_quantity,item_unit,name_of_inputter,date_inputted
-2,Black Paint,10,Litres,James,2025-10-31
-3,Screws,100000,units,Sam,2025-10-31
+1,Hammer,100,units,SamWatson,2025-10-31
+2,Black Paint,100,Litres,SamWatson,2025-10-31
+3,Screws,100000,units,SamWatson,2025-10-31
